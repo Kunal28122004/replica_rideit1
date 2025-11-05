@@ -1,0 +1,2215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Booking App - Multi Panel</title>
+    <style>
+        :root {
+            --color-primary: #32B8C6;
+            --color-primary-dark: #2A9BA7;
+            --color-primary-light: #E8F8FA;
+            --color-secondary: #1E3A5F;
+            --color-accent: #FF6B6B;
+            --color-danger: #EF4444;
+            --color-warning: #F59E0B;
+            --color-success: #10B981;
+            --color-dark: #1F2937;
+            --color-light: #F3F4F6;
+            --color-white: #FFFFFF;
+            --color-gray: #9CA3AF;
+            --color-gray-dark: #6B7280;
+            --color-text: #111827;
+            --color-text-light: #6B7280;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --border-radius: 16px;
+            --border-radius-sm: 12px;
+            --border-radius-lg: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #F9FAFB;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            background: var(--color-white);
+            width: 100%;
+            max-width: 430px;
+            min-height: 100vh;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: none;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            min-height: 100vh;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .splash-logo {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .splash-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .splash-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Header */
+        .header {
+            background: var(--color-white);
+            color: var(--color-text);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-light);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .back-btn {
+            background: var(--color-light);
+            border: none;
+            color: var(--color-text);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--color-gray);
+            color: var(--color-white);
+        }
+
+        /* Content */
+        .content {
+            padding: 20px;
+        }
+
+        /* Button Styles */
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 2px 8px rgba(50, 184, 198, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(50, 184, 198, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--color-light);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--color-primary-light);
+        }
+
+        /* Input Styles */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--color-text);
+            font-size: 14px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: var(--border-radius-sm);
+            font-size: 15px;
+            transition: all 0.2s;
+            background: var(--color-white);
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(50, 184, 198, 0.1);
+        }
+
+        .input::placeholder {
+            color: var(--color-gray);
+        }
+
+        /* OTP Input */
+        .otp-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .otp-input {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid var(--color-light);
+            border-radius: 12px;
+        }
+
+        .otp-input:focus {
+            border-color: var(--color-primary);
+            outline: none;
+        }
+
+        /* Role Selection */
+        .role-card {
+            background: var(--color-white);
+            border: 2px solid var(--color-light);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .role-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .role-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .role-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        /* Location Input */
+        .location-input {
+            background: var(--color-white);
+            border: 1.5px solid #E5E7EB;
+            border-radius: var(--border-radius-sm);
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .location-input:focus-within {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(50, 184, 198, 0.1);
+        }
+
+        .location-icon {
+            font-size: 20px;
+            color: var(--color-primary);
+            min-width: 20px;
+        }
+
+        .location-input input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            font-size: 15px;
+            color: var(--color-text);
+        }
+
+        .location-input input:focus {
+            outline: none;
+        }
+
+        .location-input input::placeholder {
+            color: var(--color-gray);
+        }
+
+        /* Map Preview */
+        .map-preview {
+            background: var(--color-light);
+            height: 250px;
+            border-radius: 16px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-marker {
+            position: absolute;
+            font-size: 30px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .map-route {
+            width: 80%;
+            height: 2px;
+            background: var(--color-primary);
+            position: absolute;
+            top: 50%;
+        }
+
+        /* Fare Info */
+        .fare-info {
+            background: var(--color-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .fare-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .fare-row.total {
+            font-weight: 600;
+            font-size: 18px;
+            padding-top: 10px;
+            border-top: 2px solid var(--color-gray);
+        }
+
+        /* Driver Card */
+        .driver-card {
+            background: var(--color-white);
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .driver-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+
+        .driver-info {
+            flex: 1;
+        }
+
+        .driver-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: var(--color-text);
+        }
+
+        .driver-rating {
+            color: #F59E0B;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .driver-vehicle {
+            color: var(--color-gray-dark);
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        /* Ride Status */
+        .ride-status {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .status-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .status-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-subtitle {
+            color: var(--color-gray);
+            font-size: 16px;
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--color-light);
+            border-top: 4px solid var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* List Items */
+        .list-item {
+            background: var(--color-white);
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius-sm);
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .list-item:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow);
+        }
+
+        .list-item-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--color-text);
+            font-size: 15px;
+        }
+
+        .list-item-subtitle {
+            font-size: 13px;
+            color: var(--color-gray-dark);
+            line-height: 1.5;
+        }
+
+        .list-item-amount {
+            font-weight: 700;
+            font-size: 17px;
+            color: var(--color-primary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            background: var(--color-white);
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 8px 16px 8px;
+            border-radius: 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.2s;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-item:hover {
+            background: var(--color-light);
+        }
+
+        .nav-item.active {
+            color: var(--color-primary);
+        }
+
+        .nav-item.active .nav-icon {
+            background: var(--color-primary-light);
+            color: var(--color-primary);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 4px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: var(--color-light);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--color-gray);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--color-primary);
+        }
+
+        .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 33px;
+        }
+
+        /* Stats Card */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: var(--color-white);
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--color-gray-dark);
+            font-weight: 500;
+        }
+
+        /* Payment Options */
+        .payment-option {
+            background: var(--color-white);
+            border: 2px solid var(--color-light);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: var(--color-primary);
+        }
+
+        .payment-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(0, 184, 148, 0.1);
+        }
+
+        .payment-icon {
+            font-size: 30px;
+        }
+
+        /* Profile */
+        .profile-header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: white;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-phone {
+            color: var(--color-gray);
+        }
+
+        /* Admin Dashboard */
+        .admin-header {
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: -50px;
+            padding: 0 20px;
+        }
+
+        .admin-stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-stat-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .admin-stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--color-dark);
+            margin-bottom: 5px;
+        }
+
+        .admin-stat-label {
+            font-size: 14px;
+            color: var(--color-gray);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(0, 184, 148, 0.2);
+            color: var(--color-success);
+        }
+
+        .badge-pending {
+            background: rgba(253, 203, 110, 0.2);
+            color: #E17055;
+        }
+
+        .badge-active {
+            background: rgba(9, 132, 227, 0.2);
+            color: var(--color-secondary);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-success);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -100%); }
+            to { transform: translate(-50%, 0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .app-container {
+                border-radius: 0;
+                max-width: 100%;
+                min-height: 100vh;
+            }
+            
+            .bottom-nav {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container" id="appContainer">
+        <!-- Notification -->
+        <div class="notification" id="notification"></div>
+
+        <!-- Splash Screen -->
+        <div class="screen active" id="splashScreen">
+            <div class="splash-screen">
+                <div class="splash-logo">🚗</div>
+                <div class="splash-title">Ride It</div>
+                <div class="splash-subtitle">Go anywhere with Ride It</div>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div class="screen" id="loginScreen">
+            <div class="header">
+                <div class="header-title">Welcome Back</div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 12px; font-size: 24px; font-weight: 700;">Welcome Back! 👋</h2>
+                <p style="color: var(--color-gray-dark); margin-bottom: 32px;">Sign in to continue your journey</p>
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input type="tel" class="input" id="phoneInput" placeholder="Enter your phone number" maxlength="10">
+                </div>
+                <button class="btn btn-primary" onclick="sendOTP()">Continue</button>
+                <p style="text-align: center; margin-top: 20px; color: var(--color-gray);">
+                    Don't have an account? <a href="#" onclick="showScreen('signupScreen')" style="color: var(--color-primary); text-decoration: none;">Sign Up</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- OTP Screen -->
+        <div class="screen" id="otpScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('loginScreen')">←</button>
+                <div class="header-title">Verify OTP</div>
+                <div></div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 10px;">Enter OTP</h2>
+                <p style="color: var(--color-gray); margin-bottom: 30px;">
+                    We've sent a code to <span id="phoneDisplay"></span>
+                </p>
+                <div class="otp-container">
+                    <input type="text" class="otp-input" maxlength="1" id="otp1">
+                    <input type="text" class="otp-input" maxlength="1" id="otp2">
+                    <input type="text" class="otp-input" maxlength="1" id="otp3">
+                    <input type="text" class="otp-input" maxlength="1" id="otp4">
+                </div>
+                <p style="text-align: center; color: var(--color-gray); margin-bottom: 20px;">
+                    Resend OTP in <span id="timer">30</span>s
+                </p>
+                <button class="btn btn-primary" onclick="verifyOTP()">Verify & Continue</button>
+            </div>
+        </div>
+
+        <!-- Sign Up Screen -->
+        <div class="screen" id="signupScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('loginScreen')">←</button>
+                <div class="header-title">Create Account</div>
+                <div></div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 12px; font-size: 24px; font-weight: 700;">Join Ride It 🚀</h2>
+                <p style="color: var(--color-gray-dark); margin-bottom: 32px;">Create your account to get started</p>
+                
+                <div class="input-group">
+                    <label class="input-label">Full Name</label>
+                    <input type="text" class="input" id="signupName" placeholder="Enter your full name">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Email Address</label>
+                    <input type="email" class="input" id="signupEmail" placeholder="Enter your email">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input type="tel" class="input" id="signupPhone" placeholder="Enter your phone number" maxlength="10">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Create Password</label>
+                    <input type="password" class="input" id="signupPassword" placeholder="Create a password">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Confirm Password</label>
+                    <input type="password" class="input" id="signupConfirmPassword" placeholder="Confirm your password">
+                </div>
+
+                <div style="display: flex; align-items: start; gap: 10px; margin-bottom: 20px;">
+                    <input type="checkbox" id="termsCheckbox" style="margin-top: 3px;">
+                    <label for="termsCheckbox" style="font-size: 13px; color: var(--color-gray-dark);">
+                        I agree to the <a href="#" style="color: var(--color-primary);">Terms & Conditions</a> and <a href="#" style="color: var(--color-primary);">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button class="btn btn-primary" onclick="createAccount()">Create Account</button>
+                
+                <p style="text-align: center; margin-top: 20px; color: var(--color-gray);">
+                    Already have an account? <a href="#" onclick="showScreen('loginScreen')" style="color: var(--color-primary); text-decoration: none;">Sign In</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Role Selection Screen -->
+        <div class="screen" id="roleScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('loginScreen')">←</button>
+                <div class="header-title">Select Your Role</div>
+                <div></div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 30px;">How would you like to use Ride It?</h2>
+                <div class="role-card" onclick="selectRole('user')">
+                    <div class="role-icon">🧑</div>
+                    <div class="role-name">Rider</div>
+                    <p style="color: var(--color-gray); margin-top: 10px;">Book rides and travel</p>
+                </div>
+                <div class="role-card" onclick="selectRole('driver')">
+                    <div class="role-icon">🚗</div>
+                    <div class="role-name">Driver</div>
+                    <p style="color: var(--color-gray); margin-top: 10px;">Earn by driving</p>
+                </div>
+                <div class="role-card" onclick="showAdminLogin()">
+                    <div class="role-icon">👨‍💼</div>
+                    <div class="role-name">Admin</div>
+                    <p style="color: var(--color-gray); margin-top: 10px;">Manage the platform</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- USER APP SCREENS -->
+        
+        <!-- User Home Screen -->
+        <div class="screen" id="userHome">
+            <div class="header">
+                <div>
+                    <div class="header-title">Good Morning, Mohit</div>
+                    <div style="font-size: 13px; color: var(--color-gray-dark); margin-top: 2px;">Where would you like to go?</div>
+                </div>
+                <button class="back-btn" onclick="showLogoutConfirm()">🚪</button>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <h3 style="margin-bottom: 16px; font-size: 18px; font-weight: 600;">Book Your Ride</h3>
+                
+                <div class="location-input">
+                    <span class="location-icon">🔵</span>
+                    <input type="text" placeholder="Pickup location" id="pickupLocation">
+                </div>
+                
+                <div class="location-input">
+                    <span class="location-icon">🔴</span>
+                    <input type="text" placeholder="Drop location" id="dropLocation">
+                </div>
+
+                <div class="map-preview">
+                    <span class="map-marker" style="top: 30%; left: 20%;">🔵</span>
+                    <div class="map-route"></div>
+                    <span class="map-marker" style="top: 30%; right: 20%;">🔴</span>
+                </div>
+
+                <div class="fare-info">
+                    <div class="fare-row">
+                        <span>Distance</span>
+                        <span>8.5 km</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Estimated Time</span>
+                        <span>15-20 min</span>
+                    </div>
+                    <div class="fare-row total">
+                        <span>Estimated Fare</span>
+                        <span>₹120</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="showScreen('driverSearchScreen')">Find Nearby Drivers</button>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="showScreen('userHome')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('rideHistoryScreen')">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-label">History</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('userProfileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Driver Search Screen -->
+        <div class="screen" id="driverSearchScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('userHome')">←</button>
+                <div class="header-title">Finding Drivers</div>
+                <div></div>
+            </div>
+            <div class="content">
+                <div class="ride-status">
+                    <div class="status-icon">🔍</div>
+                    <div class="loading-spinner"></div>
+                    <div class="status-title">Searching...</div>
+                    <div class="status-subtitle">Finding the best driver for you</div>
+                </div>
+                <button class="btn btn-secondary" onclick="showScreen('userHome')">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Driver Assigned Screen -->
+        <div class="screen" id="driverAssignedScreen">
+            <div class="header">
+                <div class="header-title">Driver Assigned</div>
+            </div>
+            <div class="content">
+                <div class="driver-card">
+                    <div class="driver-avatar">👨</div>
+                    <div class="driver-info">
+                        <div class="driver-name">Rajesh Kumar</div>
+                        <div class="driver-rating">⭐ 4.8 (234 rides)</div>
+                        <div class="driver-vehicle">Honda Activa • KA-05-AB-1234</div>
+                    </div>
+                    <div>
+                        <button class="btn" style="padding: 10px 15px; font-size: 20px;">📞</button>
+                    </div>
+                </div>
+
+                <div class="map-preview">
+                    <span class="map-marker">🚗</span>
+                    <p style="margin-top: 10px;">Driver is 2 mins away</p>
+                </div>
+
+                <div class="fare-info">
+                    <div class="fare-row">
+                        <span>Pickup</span>
+                        <span>Koramangala</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Drop</span>
+                        <span>Indiranagar</span>
+                    </div>
+                    <div class="fare-row total">
+                        <span>Total Fare</span>
+                        <span>₹120</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="showScreen('rideInProgressScreen')">Start Ride</button>
+                <button class="btn btn-outline" onclick="showNotification('Ride Cancelled'); showScreen('userHome')">Cancel Ride</button>
+            </div>
+        </div>
+
+        <!-- Ride In Progress Screen -->
+        <div class="screen" id="rideInProgressScreen">
+            <div class="header">
+                <div class="header-title">Ride in Progress</div>
+            </div>
+            <div class="content">
+                <div class="map-preview" style="height: 350px;">
+                    <span class="map-marker">🚗</span>
+                    <p style="margin-top: 10px;">En route to destination</p>
+                </div>
+
+                <div class="driver-card">
+                    <div class="driver-avatar">👨</div>
+                    <div class="driver-info">
+                        <div class="driver-name">Rajesh Kumar</div>
+                        <div class="driver-vehicle">5 mins away • 2.3 km</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="showScreen('rideCompletedScreen')">Complete Ride</button>
+            </div>
+        </div>
+
+        <!-- Ride Completed Screen -->
+        <div class="screen" id="rideCompletedScreen">
+            <div class="header">
+                <div class="header-title">Ride Completed</div>
+            </div>
+            <div class="content">
+                <div class="ride-status">
+                    <div class="status-icon">✅</div>
+                    <div class="status-title">Trip Complete!</div>
+                    <div class="status-subtitle">Hope you had a great ride</div>
+                </div>
+
+                <div class="fare-info">
+                    <div class="fare-row">
+                        <span>Distance Traveled</span>
+                        <span>8.5 km</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Time Taken</span>
+                        <span>18 mins</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Base Fare</span>
+                        <span>₹100</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Taxes</span>
+                        <span>₹20</span>
+                    </div>
+                    <div class="fare-row total">
+                        <span>Total Fare</span>
+                        <span>₹120</span>
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 15px 0;">Select Payment Method</h3>
+                
+                <div class="payment-option" onclick="selectPayment(this)">
+                    <span class="payment-icon">💵</span>
+                    <div>
+                        <div style="font-weight: 600;">Cash</div>
+                        <div style="font-size: 14px; color: var(--color-gray);">Pay with cash</div>
+                    </div>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment(this)">
+                    <span class="payment-icon">📱</span>
+                    <div>
+                        <div style="font-weight: 600;">UPI</div>
+                        <div style="font-size: 14px; color: var(--color-gray);">Pay via UPI</div>
+                    </div>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment(this)">
+                    <span class="payment-icon">💳</span>
+                    <div>
+                        <div style="font-weight: 600;">Card</div>
+                        <div style="font-size: 14px; color: var(--color-gray);">Credit/Debit Card</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="completePayment()">Complete Payment</button>
+            </div>
+        </div>
+
+        <!-- Ride History Screen -->
+        <div class="screen" id="rideHistoryScreen">
+            <div class="header">
+                <div class="header-title">Ride History</div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <h2 style="margin-bottom: 20px;">Past Rides</h2>
+                
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Koramangala → Indiranagar</div>
+                        <div class="list-item-subtitle">Today, 2:30 PM • 8.5 km</div>
+                        <div class="list-item-subtitle">Rajesh Kumar</div>
+                    </div>
+                    <div class="list-item-amount">₹120</div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">MG Road → Whitefield</div>
+                        <div class="list-item-subtitle">Yesterday, 9:15 AM • 12.3 km</div>
+                        <div class="list-item-subtitle">Suresh Patel</div>
+                    </div>
+                    <div class="list-item-amount">₹185</div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">HSR Layout → Electronic City</div>
+                        <div class="list-item-subtitle">2 days ago, 6:45 PM • 15.7 km</div>
+                        <div class="list-item-subtitle">Anil Sharma</div>
+                    </div>
+                    <div class="list-item-amount">₹230</div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Jayanagar → Malleshwaram</div>
+                        <div class="list-item-subtitle">3 days ago, 11:20 AM • 10.2 km</div>
+                        <div class="list-item-subtitle">Vikram Singh</div>
+                    </div>
+                    <div class="list-item-amount">₹150</div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="showScreen('userHome')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item active" onclick="showScreen('rideHistoryScreen')">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-label">History</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('userProfileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile Screen -->
+        <div class="screen" id="userProfileScreen">
+            <div class="header">
+                <div class="header-title">Profile</div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="profile-header">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-name">Amit Sharma</div>
+                    <div class="profile-phone">+91 98765 43210</div>
+                </div>
+
+                <div class="list-item" style="cursor: pointer;">
+                    <div>
+                        <div class="list-item-title">Edit Profile</div>
+                    </div>
+                    <span>→</span>
+                </div>
+
+                <div class="list-item" style="cursor: pointer;">
+                    <div>
+                        <div class="list-item-title">My Addresses</div>
+                    </div>
+                    <span>→</span>
+                </div>
+
+                <div class="list-item" style="cursor: pointer;">
+                    <div>
+                        <div class="list-item-title">Payment Methods</div>
+                    </div>
+                    <span>→</span>
+                </div>
+
+                <div class="list-item" style="cursor: pointer;">
+                    <div>
+                        <div class="list-item-title">Help & Support</div>
+                    </div>
+                    <span>→</span>
+                </div>
+
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="showScreen('userHome')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('rideHistoryScreen')">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-label">History</div>
+                </div>
+                <div class="nav-item active" onclick="showScreen('userProfileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRIVER APP SCREENS -->
+
+        <!-- Driver Dashboard -->
+        <div class="screen" id="driverDashboard">
+            <div class="header">
+                <div class="header-title">Driver Dashboard 🚗</div>
+                <button class="back-btn" onclick="showLogoutConfirm()">🚪</button>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="toggle-container">
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 5px;">Your Status</div>
+                        <div style="font-size: 14px; color: var(--color-gray);">
+                            <span id="driverStatusText">Offline</span>
+                        </div>
+                    </div>
+                    <div class="toggle-switch" id="driverToggle" onclick="toggleDriverStatus()">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 15px 0;">Today's Stats</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Total Rides</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">₹1,850</div>
+                        <div class="stat-label">Earnings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">98 km</div>
+                        <div class="stat-label">Distance</div>
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 15px 0;">Recent Rides</h3>
+                
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Koramangala → Indiranagar</div>
+                        <div class="list-item-subtitle">Today, 2:30 PM • 8.5 km</div>
+                    </div>
+                    <div class="list-item-amount">₹120</div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">MG Road → Whitefield</div>
+                        <div class="list-item-subtitle">Today, 12:15 PM • 12.3 km</div>
+                    </div>
+                    <div class="list-item-amount">₹185</div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="showScreen('driverDashboard')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('driverEarningsScreen')">
+                    <div class="nav-icon">💰</div>
+                    <div class="nav-label">Earnings</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('driverProfileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incoming Ride Request -->
+        <div class="screen" id="incomingRideScreen">
+            <div class="header">
+                <div class="header-title">New Ride Request</div>
+            </div>
+            <div class="content">
+                <div class="ride-status">
+                    <div class="status-icon">🔔</div>
+                    <div class="status-title">New Ride Request!</div>
+                    <div class="status-subtitle">Respond within 30 seconds</div>
+                </div>
+
+                <div class="driver-card" style="margin-top: 20px;">
+                    <div class="driver-avatar">👤</div>
+                    <div class="driver-info">
+                        <div class="driver-name">Priya Mehta</div>
+                        <div class="driver-rating">⭐ 4.9 (156 rides)</div>
+                    </div>
+                </div>
+
+                <div class="fare-info">
+                    <div class="fare-row">
+                        <span>Pickup</span>
+                        <span>Koramangala (2.5 km away)</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Drop</span>
+                        <span>Indiranagar</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Distance</span>
+                        <span>8.5 km</span>
+                    </div>
+                    <div class="fare-row total">
+                        <span>You'll Earn</span>
+                        <span>₹108</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="acceptRide()">Accept Ride</button>
+                <button class="btn btn-secondary" onclick="showScreen('driverDashboard')">Reject</button>
+            </div>
+        </div>
+
+        <!-- Driver - Ride In Progress -->
+        <div class="screen" id="driverRideInProgressScreen">
+            <div class="header">
+                <div class="header-title">Ride in Progress</div>
+            </div>
+            <div class="content">
+                <div class="map-preview" style="height: 300px;">
+                    <span class="map-marker">📍</span>
+                    <p style="margin-top: 10px;">Navigate to destination</p>
+                </div>
+
+                <div class="driver-card">
+                    <div class="driver-avatar">👤</div>
+                    <div class="driver-info">
+                        <div class="driver-name">Priya Mehta</div>
+                        <div class="driver-vehicle">Destination: 3.2 km away</div>
+                    </div>
+                    <div>
+                        <button class="btn" style="padding: 10px 15px; font-size: 20px;">📞</button>
+                    </div>
+                </div>
+
+                <div class="fare-info">
+                    <div class="fare-row">
+                        <span>Pickup</span>
+                        <span>Koramangala</span>
+                    </div>
+                    <div class="fare-row">
+                        <span>Drop</span>
+                        <span>Indiranagar</span>
+                    </div>
+                    <div class="fare-row total">
+                        <span>Fare</span>
+                        <span>₹120</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="completeDriverRide()">Complete Ride</button>
+                <button class="btn btn-outline" onclick="showScreen('driverDashboard')">Navigate</button>
+            </div>
+        </div>
+
+        <!-- Driver Earnings -->
+        <div class="screen" id="driverEarningsScreen">
+            <div class="header">
+                <div class="header-title">Earnings</div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="stat-card" style="background: var(--color-primary); color: white; margin-bottom: 20px;">
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Total Earnings (This Month)</div>
+                    <div style="font-size: 36px; font-weight: 600;">₹45,280</div>
+                </div>
+
+                <h3 style="margin: 20px 0 15px 0;">This Week</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">89</div>
+                        <div class="stat-label">Total Rides</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">₹12,450</div>
+                        <div class="stat-label">Earnings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">45h</div>
+                        <div class="stat-label">Online Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">654 km</div>
+                        <div class="stat-label">Distance</div>
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 15px 0;">Recent Transactions</h3>
+                
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Ride Earning</div>
+                        <div class="list-item-subtitle">Today, 2:30 PM</div>
+                    </div>
+                    <div class="list-item-amount">+ ₹108</div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Ride Earning</div>
+                        <div class="list-item-subtitle">Today, 12:15 PM</div>
+                    </div>
+                    <div class="list-item-amount">+ ₹165</div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Ride Earning</div>
+                        <div class="list-item-subtitle">Yesterday, 8:45 PM</div>
+                    </div>
+                    <div class="list-item-amount">+ ₹95</div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="showScreen('driverDashboard')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item active" onclick="showScreen('driverEarningsScreen')">
+                    <div class="nav-icon">💰</div>
+                    <div class="nav-label">Earnings</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('driverProfileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Driver Profile -->
+        <div class="screen" id="driverProfileScreen">
+            <div class="header">
+                <div class="header-title">Driver Profile</div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="profile-header">
+                    <div class="profile-avatar">🚗</div>
+                    <div class="profile-name">Rajesh Kumar</div>
+                    <div class="profile-phone">+91 98765 43210</div>
+                    <div style="margin-top: 10px;">
+                        <span class="badge badge-success">Verified Driver</span>
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 15px 0;">Vehicle Details</h3>
+                
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Honda Activa</div>
+                        <div class="list-item-subtitle">KA-05-AB-1234</div>
+                    </div>
+                    <span>→</span>
+                </div>
+
+                <h3 style="margin: 20px 0 15px 0;">Documents</h3>
+                
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Driving License</div>
+                        <div class="list-item-subtitle">DL1234567890123</div>
+                    </div>
+                    <span class="badge badge-success">Verified</span>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Vehicle RC</div>
+                        <div class="list-item-subtitle">RC1234567890</div>
+                    </div>
+                    <span class="badge badge-success">Verified</span>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Insurance</div>
+                        <div class="list-item-subtitle">Valid till Dec 2025</div>
+                    </div>
+                    <span class="badge badge-success">Active</span>
+                </div>
+
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="showScreen('driverDashboard')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Home</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('driverEarningsScreen')">
+                    <div class="nav-icon">💰</div>
+                    <div class="nav-label">Earnings</div>
+                </div>
+                <div class="nav-item active" onclick="showScreen('driverProfileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profile</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN APP SCREENS -->
+
+        <!-- Admin Login Screen -->
+        <div class="screen" id="adminLoginScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('roleScreen')">←</button>
+                <div class="header-title">Admin Login</div>
+                <div></div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 12px; font-size: 24px; font-weight: 700;">Admin Access 🔐</h2>
+                <p style="color: var(--color-gray-dark); margin-bottom: 32px;">Enter admin credentials to continue</p>
+                <div class="input-group">
+                    <label class="input-label">Username</label>
+                    <input type="text" class="input" id="adminUsername" placeholder="Enter admin username">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Password</label>
+                    <input type="password" class="input" id="adminPassword" placeholder="Enter admin password">
+                </div>
+                <button class="btn btn-primary" onclick="verifyAdminLogin()">Login as Admin</button>
+                <p style="text-align: center; margin-top: 20px; color: var(--color-gray); font-size: 13px;">
+                    Demo: admin / admin123
+                </p>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div class="screen" id="adminDashboard">
+            <div class="admin-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2>Admin Dashboard</h2>
+                        <p style="opacity: 0.9; margin-top: 5px;">Ride It Management</p>
+                    </div>
+                    <button class="back-btn" onclick="showLogoutConfirm()" style="background: rgba(255,255,255,0.2); color: white;">🚪</button>
+                </div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="admin-stats">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">👥</div>
+                        <div class="admin-stat-value">12,458</div>
+                        <div class="admin-stat-label">Total Users</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">🚗</div>
+                        <div class="admin-stat-value">3,842</div>
+                        <div class="admin-stat-label">Total Drivers</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">📊</div>
+                        <div class="admin-stat-value">1,245</div>
+                        <div class="admin-stat-label">Active Rides</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">💰</div>
+                        <div class="admin-stat-value">₹8.5L</div>
+                        <div class="admin-stat-label">Today's Revenue</div>
+                    </div>
+                </div>
+
+                <h3 style="margin: 80px 0 15px 0;">Recent Activities</h3>
+                
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">New Driver Registration</div>
+                        <div class="list-item-subtitle">Ramesh Verma • 5 mins ago</div>
+                    </div>
+                    <span class="badge badge-pending">Pending</span>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">Ride Completed</div>
+                        <div class="list-item-subtitle">ID: #12345 • 10 mins ago</div>
+                    </div>
+                    <span class="badge badge-success">Completed</span>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">New User Signup</div>
+                        <div class="list-item-subtitle">Anjali Gupta • 15 mins ago</div>
+                    </div>
+                    <span class="badge badge-success">Active</span>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="showScreen('adminDashboard')">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Dashboard</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminUsersScreen')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Users</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminDriversScreen')">
+                    <div class="nav-icon">🚗</div>
+                    <div class="nav-label">Drivers</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminRidesScreen')">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-label">Rides</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Users Screen -->
+        <div class="screen" id="adminUsersScreen">
+            <div class="header">
+                <div class="header-title">Manage Users</div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="input-group">
+                    <input type="text" class="input" placeholder="Search users...">
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">👤</div>
+                        <div>
+                            <div class="list-item-title">Amit Sharma</div>
+                            <div class="list-item-subtitle">+91 98765 43210 • 45 rides</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-active">Active</span>
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">👤</div>
+                        <div>
+                            <div class="list-item-title">Priya Mehta</div>
+                            <div class="list-item-subtitle">+91 87654 32109 • 156 rides</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-active">Active</span>
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">👤</div>
+                        <div>
+                            <div class="list-item-title">Rahul Desai</div>
+                            <div class="list-item-subtitle">+91 76543 21098 • 23 rides</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-active">Active</span>
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">👤</div>
+                        <div>
+                            <div class="list-item-title">Neha Singh</div>
+                            <div class="list-item-subtitle">+91 65432 10987 • 89 rides</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-active">Active</span>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="showScreen('adminDashboard')">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Dashboard</div>
+                </div>
+                <div class="nav-item active" onclick="showScreen('adminUsersScreen')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Users</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminDriversScreen')">
+                    <div class="nav-icon">🚗</div>
+                    <div class="nav-label">Drivers</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminRidesScreen')">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-label">Rides</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Drivers Screen -->
+        <div class="screen" id="adminDriversScreen">
+            <div class="header">
+                <div class="header-title">Manage Drivers</div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="input-group">
+                    <input type="text" class="input" placeholder="Search drivers...">
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">🚗</div>
+                        <div>
+                            <div class="list-item-title">Rajesh Kumar</div>
+                            <div class="list-item-subtitle">KA-05-AB-1234 • ⭐ 4.8</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-success">Verified</span>
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">🚗</div>
+                        <div>
+                            <div class="list-item-title">Suresh Patel</div>
+                            <div class="list-item-subtitle">KA-03-CD-5678 • ⭐ 4.9</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-success">Verified</span>
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">🚗</div>
+                        <div>
+                            <div class="list-item-title">Ramesh Verma</div>
+                            <div class="list-item-subtitle">KA-02-EF-9012 • New</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-pending">Pending</span>
+                </div>
+
+                <div class="list-item">
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <div class="driver-avatar" style="width: 40px; height: 40px; font-size: 20px;">🚗</div>
+                        <div>
+                            <div class="list-item-title">Anil Sharma</div>
+                            <div class="list-item-subtitle">KA-01-GH-3456 • ⭐ 4.7</div>
+                        </div>
+                    </div>
+                    <span class="badge badge-success">Verified</span>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="showScreen('adminDashboard')">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Dashboard</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminUsersScreen')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Users</div>
+                </div>
+                <div class="nav-item active" onclick="showScreen('adminDriversScreen')">
+                    <div class="nav-icon">🚗</div>
+                    <div class="nav-label">Drivers</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminRidesScreen')">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-label">Rides</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Rides Screen -->
+        <div class="screen" id="adminRidesScreen">
+            <div class="header">
+                <div class="header-title">All Rides</div>
+            </div>
+            <div class="content" style="padding-bottom: 80px;">
+                <div class="input-group">
+                    <input type="text" class="input" placeholder="Search rides...">
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">#12345 • Koramangala → Indiranagar</div>
+                        <div class="list-item-subtitle">Amit Sharma → Rajesh Kumar</div>
+                        <div class="list-item-subtitle">Today, 2:30 PM • 8.5 km</div>
+                    </div>
+                    <div>
+                        <div class="list-item-amount">₹120</div>
+                        <span class="badge badge-success" style="margin-top: 5px;">Completed</span>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">#12344 • MG Road → Whitefield</div>
+                        <div class="list-item-subtitle">Priya Mehta → Suresh Patel</div>
+                        <div class="list-item-subtitle">Today, 12:15 PM • 12.3 km</div>
+                    </div>
+                    <div>
+                        <div class="list-item-amount">₹185</div>
+                        <span class="badge badge-active" style="margin-top: 5px;">In Progress</span>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">#12343 • Jayanagar → HSR Layout</div>
+                        <div class="list-item-subtitle">Rahul Desai → Anil Sharma</div>
+                        <div class="list-item-subtitle">Today, 10:45 AM • 6.2 km</div>
+                    </div>
+                    <div>
+                        <div class="list-item-amount">₹95</div>
+                        <span class="badge badge-success" style="margin-top: 5px;">Completed</span>
+                    </div>
+                </div>
+
+                <div class="list-item">
+                    <div>
+                        <div class="list-item-title">#12342 • BTM Layout → Electronic City</div>
+                        <div class="list-item-subtitle">Neha Singh → Vikram Singh</div>
+                        <div class="list-item-subtitle">Today, 9:20 AM • 15.7 km</div>
+                    </div>
+                    <div>
+                        <div class="list-item-amount">₹230</div>
+                        <span class="badge badge-success" style="margin-top: 5px;">Completed</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="showScreen('adminDashboard')">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Dashboard</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminUsersScreen')">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-label">Users</div>
+                </div>
+                <div class="nav-item" onclick="showScreen('adminDriversScreen')">
+                    <div class="nav-icon">🚗</div>
+                    <div class="nav-label">Drivers</div>
+                </div>
+                <div class="nav-item active" onclick="showScreen('adminRidesScreen')">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-label">Rides</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Global State
+        let currentUser = {
+            phone: '',
+            role: '',
+            name: ''
+        };
+
+        let driverOnline = false;
+
+        // Initialize App
+        setTimeout(() => {
+            showScreen('loginScreen');
+        }, 2000);
+
+        // Create Account Function
+        function createAccount() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const termsAccepted = document.getElementById('termsCheckbox').checked;
+
+            // Validation
+            if (!name) {
+                showNotification('Please enter your full name');
+                return;
+            }
+
+            if (!email || !email.includes('@')) {
+                showNotification('Please enter a valid email address');
+                return;
+            }
+
+            if (!phone || phone.length < 10) {
+                showNotification('Please enter a valid phone number');
+                return;
+            }
+
+            if (!password || password.length < 6) {
+                showNotification('Password must be at least 6 characters');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match');
+                return;
+            }
+
+            if (!termsAccepted) {
+                showNotification('Please accept Terms & Conditions');
+                return;
+            }
+
+            // Success - save user data and proceed
+            currentUser.phone = phone;
+            currentUser.name = name;
+            showNotification('Account created successfully!');
+            setTimeout(() => {
+                showScreen('roleScreen');
+            }, 1000);
+        }
+
+        // Admin Login Functions
+        function showAdminLogin() {
+            showScreen('adminLoginScreen');
+        }
+
+        function verifyAdminLogin() {
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+
+            if (username === 'admin' && password === 'admin123') {
+                currentUser.role = 'admin';
+                currentUser.name = 'Admin User';
+                showNotification('Admin login successful!');
+                setTimeout(() => {
+                    showScreen('adminDashboard');
+                }, 1000);
+            } else {
+                showNotification('Invalid admin credentials');
+            }
+        }
+
+        // Logout Confirmation
+        function showLogoutConfirm() {
+            if (confirm('Are you sure you want to logout?')) {
+                logout();
+            }
+        }
+
+        // Screen Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // OTP Functionality
+        function sendOTP() {
+            const phone = document.getElementById('phoneInput').value;
+            if (!phone || phone.length < 10) {
+                showNotification('Please enter a valid phone number');
+                return;
+            }
+            currentUser.phone = phone;
+            document.getElementById('phoneDisplay').textContent = phone;
+            showScreen('otpScreen');
+            startTimer();
+            setupOTPInputs();
+        }
+
+        function setupOTPInputs() {
+            const inputs = document.querySelectorAll('.otp-input');
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.length === 1 && index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                });
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+            });
+        }
+
+        function startTimer() {
+            let seconds = 30;
+            const timerElement = document.getElementById('timer');
+            const interval = setInterval(() => {
+                seconds--;
+                timerElement.textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    timerElement.textContent = '0';
+                }
+            }, 1000);
+        }
+
+        function verifyOTP() {
+            const otp1 = document.getElementById('otp1').value;
+            const otp2 = document.getElementById('otp2').value;
+            const otp3 = document.getElementById('otp3').value;
+            const otp4 = document.getElementById('otp4').value;
+            
+            if (!otp1 || !otp2 || !otp3 || !otp4) {
+                showNotification('Please enter complete OTP');
+                return;
+            }
+
+            // Mock OTP verification (any 4-digit OTP works)
+            showNotification('OTP Verified Successfully!');
+            setTimeout(() => {
+                showScreen('roleScreen');
+            }, 1000);
+        }
+
+        // Role Selection
+        function selectRole(role) {
+            currentUser.role = role;
+            
+            if (role === 'user') {
+                currentUser.name = 'Amit Sharma';
+                showScreen('userHome');
+            } else if (role === 'driver') {
+                currentUser.name = 'Rajesh Kumar';
+                showScreen('driverDashboard');
+            } else if (role === 'admin') {
+                currentUser.name = 'Admin User';
+                showScreen('adminDashboard');
+            }
+            
+            showNotification(`Welcome ${currentUser.name}!`);
+        }
+
+        // Payment Selection
+        function selectPayment(element) {
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        function completePayment() {
+            const selected = document.querySelector('.payment-option.selected');
+            if (!selected) {
+                showNotification('Please select a payment method');
+                return;
+            }
+            showNotification('Payment Successful!');
+            setTimeout(() => {
+                showScreen('userHome');
+            }, 1500);
+        }
+
+        // Driver Functions
+        function toggleDriverStatus() {
+            const toggle = document.getElementById('driverToggle');
+            const statusText = document.getElementById('driverStatusText');
+            driverOnline = !driverOnline;
+            
+            if (driverOnline) {
+                toggle.classList.add('active');
+                statusText.textContent = 'Online - Accepting Rides';
+                showNotification('You are now online!');
+                // Simulate incoming ride after 3 seconds
+                setTimeout(() => {
+                    if (driverOnline) {
+                        showScreen('incomingRideScreen');
+                    }
+                }, 3000);
+            } else {
+                toggle.classList.remove('active');
+                statusText.textContent = 'Offline';
+                showNotification('You are now offline');
+            }
+        }
+
+        function acceptRide() {
+            showNotification('Ride Accepted!');
+            setTimeout(() => {
+                showScreen('driverRideInProgressScreen');
+            }, 1000);
+        }
+
+        function completeDriverRide() {
+            showNotification('Ride Completed! ₹108 earned');
+            setTimeout(() => {
+                showScreen('driverDashboard');
+            }, 1500);
+        }
+
+        // Notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Logout
+        function logout() {
+            currentUser = { phone: '', role: '', name: '' };
+            driverOnline = false;
+            showNotification('Logged out successfully');
+            setTimeout(() => {
+                showScreen('loginScreen');
+            }, 1000);
+        }
+
+        // Auto-search drivers simulation
+        let searchTimeout;
+        function autoSearchDrivers() {
+            searchTimeout = setTimeout(() => {
+                showScreen('driverAssignedScreen');
+                showNotification('Driver Found!');
+            }, 3000);
+        }
+
+        // Trigger driver search when that screen is shown
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.id === 'driverSearchScreen' && target.classList.contains('active')) {
+                        autoSearchDrivers();
+                    }
+                }
+            });
+        });
+
+        const searchScreen = document.getElementById('driverSearchScreen');
+        if (searchScreen) {
+            observer.observe(searchScreen, { attributes: true });
+        }
+    </script>
+</body>
+</html>
